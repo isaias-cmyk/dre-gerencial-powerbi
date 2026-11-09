@@ -1,0 +1,43 @@
+table dDRE
+	lineageTag: ee36ebda-2489-4cdc-9e56-01bcd07d0d0b
+
+	column Ordem
+		dataType: int64
+		isHidden
+		lineageTag: 6a9f3ffd-737d-45df-8e9d-4b6539a6f399
+		summarizeBy: none
+		sourceColumn: [Ordem]
+
+	column Linha
+		dataType: string
+		lineageTag: ba1d2f44-98bb-401e-ad2d-3c3c04782a88
+		summarizeBy: none
+		sourceColumn: [Linha]
+		sortByColumn: Ordem
+
+	column Subtotal
+		dataType: int64
+		isHidden
+		lineageTag: e4e0a621-4ad4-4611-9820-5dfd272f7848
+		summarizeBy: none
+		sourceColumn: [Subtotal]
+
+	partition dDRE = calculated
+		mode: import
+		source =
+				DATATABLE("Ordem", INTEGER, "Linha", STRING, "Subtotal", INTEGER, {
+					{1, "01 Receita operacional bruta", 0},
+					{2, "02 (-) Deduções da receita", 0},
+					{3, "03 (=) Receita líquida", 1},
+					{4, "04 (-) Custos de mercadorias e serviços", 0},
+					{5, "05 (=) Lucro bruto", 1},
+					{6, "06 (-) Despesas operacionais", 0},
+					{7, "07 (+/-) Resultado financeiro", 0},
+					{8, "08 (=) Resultado após despesas e financeiro", 1},
+					{9, "09 (-) Depreciação e amortização", 0},
+					{10, "10 (+/-) Outras receitas e despesas", 0},
+					{11, "11 (=) Resultado antes dos tributos", 1},
+					{12, "12 (-) Provisão para IR e CSLL", 0},
+					{13, "13 (=) Resultado líquido", 1}
+				})
+

@@ -1,0 +1,53 @@
+table fOrcamento
+	lineageTag: 73542a89-7fbc-439d-bbb6-becf28af0e3c
+
+	/// Orçamento com o mesmo sinal contábil do realizado (valor × tipoLancamento).
+	measure 'Valor Orçado' = SUMX(fOrcamento, fOrcamento[valor] * RELATED(dPlanoConta[tipoLancamento]))
+		formatString: #,##0.00
+		lineageTag: 454e8fcb-1966-4a5d-b3f9-b5bb86437878
+
+	column competencia_data
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: 0b2b7bb6-aa7b-4e4d-a575-7f0261518732
+		summarizeBy: none
+		sourceColumn: competencia_data
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planoContas_id
+		dataType: string
+		isHidden
+		lineageTag: 2c586e56-0cba-4bc3-8d58-219fbc3021e7
+		summarizeBy: none
+		sourceColumn: planoContas_id
+
+	column valor
+		dataType: double
+		isHidden
+		lineageTag: 0b0d26e4-a239-4b93-9bb9-0c1735385ea8
+		summarizeBy: none
+		sourceColumn: valor
+
+	column filial_id
+		dataType: string
+		isHidden
+		lineageTag: 0194018d-ab5c-4397-8fd6-f12119cd3ac0
+		summarizeBy: none
+		sourceColumn: filial_id
+
+	partition fOrcamento = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+				    Aba = Fonte{[Item="fOrcamento", Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

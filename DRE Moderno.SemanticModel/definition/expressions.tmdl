@@ -1,0 +1,122 @@
+expression pArquivoBase = "C:/Projetos/PowerBI/ProjetoBI/data/processed/BaseDados_Tratada.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: dbf7a1f7-6d5b-48cf-97da-7447b330caab
+
+	annotation PBI_ResultType = Text
+
+expression fLancamento1_ano1 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento1_ano1", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 6bec9b82-a58b-482d-9712-e7603ced85f5
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento2_ano1 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento2_ano1", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 5f2f1877-ade1-4cdf-bc9a-5e5397527dfa
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento3_ano1 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento3_ano1", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: eb918fbb-2e05-48fd-81a5-b443ec980921
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento1_ano2 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento1_ano2", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 3db041e4-7572-48cf-b6ee-262412efbd33
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento2_ano2 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento2_ano2", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 5c9b2d77-f4ed-4514-8658-a462fa2d3b9b
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento3_ano2 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento3_ano2", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 68c76721-48da-4ec5-9805-e5b5c305110a
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento1_ano3 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento1_ano3", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: 3a5affe6-871e-44fb-bce6-99db9e318418
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento2_ano3 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento2_ano3", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: eb9c5a65-51a2-4a52-8908-e64b91e8a9b4
+
+	annotation PBI_ResultType = Table
+
+expression fLancamento3_ano3 =
+		let
+		    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+		    Aba = Fonte{[Item="fLancamento3_ano3", Kind="Sheet"]}[Data],
+		    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+		    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+		    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+		in
+		    Tipos
+	lineageTag: fa6225f4-02c9-40c1-b237-0f7da60cf423
+
+	annotation PBI_ResultType = Table
+

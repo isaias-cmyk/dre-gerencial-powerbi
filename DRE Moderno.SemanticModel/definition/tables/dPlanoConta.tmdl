@@ -1,0 +1,72 @@
+table dPlanoConta
+	lineageTag: e9b86675-bbd5-4509-bb86-0648fc9ca907
+
+	column id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: 9ef13daf-c921-4f1a-ac84-548c055e7d33
+		summarizeBy: none
+		sourceColumn: id
+
+	column index
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 994bcd9a-2d6f-4c8b-9ad2-681c9f173503
+		summarizeBy: none
+		sourceColumn: index
+
+	column descricaoN1
+		dataType: string
+		lineageTag: 150f6d63-7d50-42d4-beda-03963d80d2bb
+		summarizeBy: none
+		sourceColumn: descricaoN1
+
+	column descricaoN2
+		dataType: string
+		lineageTag: 79e593fc-5a8d-4003-8209-32dee1eb9f69
+		summarizeBy: none
+		sourceColumn: descricaoN2
+
+	column detalharN2
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 92d95efa-8370-45ae-a22c-0076bf63b477
+		summarizeBy: none
+		sourceColumn: detalharN2
+
+	column mascaraDRE_id
+		dataType: string
+		isHidden
+		lineageTag: 781ee6ac-9e86-4ab0-a488-878b43485c5b
+		summarizeBy: none
+		sourceColumn: mascaraDRE_id
+
+	column tipoLancamento
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ede077a6-7c69-41bd-8128-8d1eea1e4a7e
+		summarizeBy: none
+		sourceColumn: tipoLancamento
+
+	column GrupoDRE
+		dataType: int64
+		lineageTag: e2cb0d48-39dd-4896-8fc4-652bbf52d242
+		summarizeBy: none
+		sourceColumn: GrupoDRE
+
+	partition dPlanoConta = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+				    Aba = Fonte{[Item="dPlanoConta", Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"id", "index", "descricaoN1", "descricaoN2", "detalharN2", "mascaraDRE_id", "tipoLancamento"}),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"id", type text}, {"index", Int64.Type}, {"descricaoN1", type text}, {"descricaoN2", type text}, {"detalharN2", Int64.Type}, {"mascaraDRE_id", type text}, {"tipoLancamento", Int64.Type}}, "pt-BR")
+				in
+				    Table.AddColumn(Tipos, "GrupoDRE", each Number.FromText(Text.AfterDelimiter([mascaraDRE_id], ".")), Int64.Type)
+

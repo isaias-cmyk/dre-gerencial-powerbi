@@ -1,0 +1,40 @@
+relationship a1b0209e-ca86-41b0-88f6-f1ab39037cac
+	fromColumn: fOrcamento.competencia_data
+	toColumn: dCalendario.Data
+
+relationship f0de70df-32fd-4e4c-94e6-2a1b720a0d12
+	fromColumn: fOrcamento.planoContas_id
+	toColumn: dPlanoConta.id
+
+relationship 43719372-27f1-4940-893b-cd6808a0cba2
+	fromColumn: fOrcamento.filial_id
+	toColumn: dFilial.id
+
+relationship bf7edaca-5a3b-4eba-9e26-5b726c51a677
+	fromColumn: fPrevisao.competencia_data
+	toColumn: dCalendario.Data
+
+relationship 86e4bb2a-8044-4a81-b431-113e6292f122
+	fromColumn: fPrevisao.planoContas_id
+	toColumn: dPlanoConta.id
+
+relationship 2bec0805-b932-40b1-b69e-ae9130ae16c0
+	fromColumn: fPrevisao.filial_id
+	toColumn: dFilial.id
+
+relationship 766f5572-eb28-4fd5-b557-ed7ee3cde836
+	fromColumn: fLancamentos.competencia_data
+	toColumn: dCalendario.Data
+
+relationship 2d888973-d342-4e4d-a90b-13d871414345
+	fromColumn: fLancamentos.planoContas_id
+	toColumn: dPlanoConta.id
+
+relationship 3b912a9c-34de-4905-b276-acc46f931ad6
+	fromColumn: fLancamentos.filial_id
+	toColumn: dFilial.id
+
+relationship 9730d393-ffca-463c-9ed1-627804414a20
+	fromColumn: dPlanoConta.mascaraDRE_id
+	toColumn: dEstruturaDRE.id
+

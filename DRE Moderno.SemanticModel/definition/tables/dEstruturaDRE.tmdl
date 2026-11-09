@@ -1,0 +1,51 @@
+table dEstruturaDRE
+	lineageTag: 3cd1ace5-8779-45be-afaf-ba95723ab064
+
+	column id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: e4348645-bd18-4f29-8b95-ea9931aaea54
+		summarizeBy: none
+		sourceColumn: id
+
+	column index
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a7a2eed7-30f5-42f1-9200-8b4b61c10c87
+		summarizeBy: none
+		sourceColumn: index
+
+	column contaGerencial
+		dataType: string
+		lineageTag: 118c6b78-77b7-44b6-9b55-131d1b5a6290
+		summarizeBy: none
+		sourceColumn: contaGerencial
+
+	column subtotal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e69a1fac-0c7e-496a-a334-d3ae1dfdfa4f
+		summarizeBy: none
+		sourceColumn: subtotal
+
+	column empresa
+		dataType: string
+		lineageTag: c2661b1b-8961-4ea0-be66-739f9d021a97
+		summarizeBy: none
+		sourceColumn: empresa
+
+	partition dEstruturaDRE = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+				    Aba = Fonte{[Item="dEstruturaDRE", Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"id", "index", "contaGerencial", "subtotal", "empresa"}),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"id", type text}, {"index", Int64.Type}, {"contaGerencial", type text}, {"subtotal", Int64.Type}, {"empresa", type text}}, "pt-BR")
+				in
+				    Tipos
+

@@ -1,0 +1,182 @@
+table dCalendario
+	lineageTag: afecafe3-95d2-441e-af44-6ecad0ff4721
+	dataCategory: Time
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: dd/MM/yyyy
+		lineageTag: d395c74b-45ee-4a19-865a-3bd57a7e74f8
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: f128a290-7ed8-4ce1-be07-cec6465d3207
+		summarizeBy: none
+		sourceColumn: Ano
+
+	column NomeMes
+		dataType: string
+		lineageTag: dc9160d0-aff9-482a-80e8-21da7a401d10
+		summarizeBy: none
+		sourceColumn: NomeMes
+		sortByColumn: MesNum
+
+	column MesAbre
+		dataType: string
+		lineageTag: dbc1d6ef-4bd4-4d79-bc21-65eec3695501
+		summarizeBy: none
+		sourceColumn: MesAbre
+		sortByColumn: MesNum
+
+	column MesAno
+		dataType: string
+		lineageTag: 9587a1ef-bc65-42b1-96c2-73835c5cad82
+		summarizeBy: none
+		sourceColumn: MesAno
+		sortByColumn: AnoMesINT
+
+	column MesNum
+		dataType: int64
+		formatString: 0
+		lineageTag: fd0993be-c64d-42bc-9111-7ff09b392e5d
+		summarizeBy: none
+		sourceColumn: MesNum
+
+	column AnoMesINT
+		dataType: int64
+		formatString: 0
+		lineageTag: 639559a2-e558-482c-9d57-3df4130619dd
+		summarizeBy: none
+		sourceColumn: AnoMesINT
+
+	column InicioMes
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: bd1a8ecc-d218-41a1-967f-abac826f188f
+		summarizeBy: none
+		sourceColumn: InicioMes
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: fc44c7a5-ea91-4521-b3ac-68f8a7e2d7a9
+		summarizeBy: none
+		sourceColumn: Trimestre
+
+	column TrimestreAbreviado
+		dataType: string
+		lineageTag: 6bc1e9ef-de97-4406-94e1-f37b22ca418b
+		summarizeBy: none
+		sourceColumn: TrimestreAbreviado
+		sortByColumn: Trimestre
+
+	column Bimestre
+		dataType: string
+		lineageTag: b1636f26-0125-4f82-aa57-2f148da94b70
+		summarizeBy: none
+		sourceColumn: Bimestre
+
+	column Semestre
+		dataType: string
+		lineageTag: b9ab0441-c2fe-486b-9361-8b007411b4ea
+		summarizeBy: none
+		sourceColumn: Semestre
+
+	column Semana
+		dataType: int64
+		formatString: 0
+		lineageTag: be8b1547-0576-4800-a53b-9924d1a53789
+		summarizeBy: none
+		sourceColumn: Semana
+
+	column DiaSemana
+		dataType: int64
+		formatString: 0
+		lineageTag: af9c5f7a-cede-43a3-9760-dcef17f27cba
+		summarizeBy: none
+		sourceColumn: DiaSemana
+
+	column NomeDia
+		dataType: string
+		lineageTag: db548c1c-5792-40af-bdf6-ce5239ae6095
+		summarizeBy: none
+		sourceColumn: NomeDia
+		sortByColumn: DiaSemana
+
+	column dataPassada
+		dataType: boolean
+		lineageTag: abff562b-8915-4b61-8871-2112edb01176
+		summarizeBy: none
+		sourceColumn: dataPassada
+
+	column AnoAtual
+		dataType: string
+		isHidden
+		lineageTag: b17f28f1-bce2-4a38-863f-716a04edb6e3
+		summarizeBy: none
+		sourceColumn: AnoAtual
+		sortByColumn: Ano
+
+	column MesAtual
+		dataType: string
+		isHidden
+		lineageTag: e7b3109a-b3fe-4c2c-9eb7-708f60e70e44
+		summarizeBy: none
+		sourceColumn: MesAtual
+
+	hierarchy Calendário
+		lineageTag: 0a011d4a-8fd0-437e-acde-76d2e25bb6d0
+
+		level Ano
+			lineageTag: 266ec5da-4a05-4191-9809-f06a67896707
+			column: Ano
+
+		level TrimestreAbreviado
+			lineageTag: f2128b5f-8652-4b07-880b-f0136d0afc56
+			column: TrimestreAbreviado
+
+		level NomeMes
+			lineageTag: 9e35d47c-f44e-4714-9131-309c21a6e797
+			column: NomeMes
+
+		level Data
+			lineageTag: 6d3770ba-923d-40e4-bcf8-4b84897058e1
+			column: Data
+
+	partition dCalendario = m
+		mode: import
+		source =
+				let
+				    Datas = List.RemoveNulls(fLancamentos[competencia_data] & fOrcamento[competencia_data] & fPrevisao[competencia_data]),
+				    Inicio = if List.IsEmpty(Datas) then error "Não existem datas nas fatos." else Date.StartOfYear(List.Min(Datas)),
+				    Fim = Date.EndOfYear(List.Max(Datas)),
+				    UltimoRealizado = List.Max(fLancamentos[competencia_data], null),
+				    Hoje = Date.From(DateTimeZone.SwitchZone(DateTimeZone.FixedUtcNow(), -3)),
+				    Dias = List.Dates(Inicio, Duration.Days(Fim-Inicio)+1, #duration(1,0,0,0)),
+				    Calendario = #table(
+				        type table [Data=date, Ano=Int64.Type, NomeMes=text, MesAbre=text, MesAno=text, MesNum=Int64.Type, AnoMesINT=Int64.Type, InicioMes=date, Trimestre=Int64.Type, TrimestreAbreviado=text, Bimestre=text, Semestre=text, Semana=Int64.Type, DiaSemana=Int64.Type, NomeDia=text, dataPassada=logical, AnoAtual=text, MesAtual=text],
+				        List.Transform(Dias, (d) => {
+				            d, Date.Year(d), Text.Proper(Date.MonthName(d,"pt-BR")),
+				            Text.Proper(Text.Start(Date.MonthName(d,"pt-BR"),3)),
+				            Text.Proper(Text.Start(Date.MonthName(d,"pt-BR"),3)) & "/" & Text.From(Date.Year(d)),
+				            Date.Month(d), Date.Year(d)*100+Date.Month(d), Date.StartOfMonth(d),
+				            Date.QuarterOfYear(d), Text.From(Date.QuarterOfYear(d)) & "º Trim",
+				            Text.From(Number.RoundUp(Date.Month(d)/2)) & "º Bim",
+				            Text.From(Number.RoundUp(Date.Month(d)/6)) & "º Sem",
+				            Date.WeekOfYear(d,Day.Monday), Date.DayOfWeek(d,Day.Monday)+1,
+				            Text.Proper(Date.DayOfWeekName(d,"pt-BR")),
+				            if UltimoRealizado = null then false else d <= Date.EndOfMonth(UltimoRealizado),
+				            if Date.Year(d)=Date.Year(Hoje) then "Ano Atual" else Text.From(Date.Year(d)),
+				            if Date.Year(d)=Date.Year(Hoje) and Date.Month(d)=Date.Month(Hoje) then "Mês Atual" else Text.Proper(Date.MonthName(d,"pt-BR"))
+				        })
+				    )
+				in
+				    Calendario
+

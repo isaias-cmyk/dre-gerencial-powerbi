@@ -1,0 +1,8 @@
+EVALUATE SUMMARIZECOLUMNS(
+ dCalendario[AnoMesINT],dFilial[id],TREATAS({13},dDRE[Ordem]),
+ "Receita",[Receita Líquida],"ReceitaAnterior",[Receita Ano Anterior],
+ "Resultado",[Resultado Líquido],"ResultadoAnterior",[Resultado Ano Anterior],
+ "DRE",[DRE Realizado],"DREAnterior",[DRE Ano Anterior],
+ "YoYReceita",[Crescimento Receita %],"YoYResultado",[Variação YoY %],"AH",[DRE AH %],
+ "CorDesvio",[DRE Cor Desvio],"CorLinha",[DRE Cor Linha],
+ "Previsto",[DRE Previsto])

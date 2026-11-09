@@ -1,0 +1,53 @@
+table fPrevisao
+	lineageTag: d5e37dba-622e-49a1-977b-401c5477078d
+
+	/// Previsão (forecast) com o mesmo sinal contábil do realizado (valor × tipoLancamento).
+	measure 'Valor Previsto' = SUMX(fPrevisao, fPrevisao[valor] * RELATED(dPlanoConta[tipoLancamento]))
+		formatString: #,##0.00
+		lineageTag: f374b745-c4e6-46be-9f28-f343a47120aa
+
+	column competencia_data
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: 0fbb1fa4-5655-43ed-bfbb-2d19c2087693
+		summarizeBy: none
+		sourceColumn: competencia_data
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planoContas_id
+		dataType: string
+		isHidden
+		lineageTag: 3f826871-899e-4004-858d-43b8e45f8daf
+		summarizeBy: none
+		sourceColumn: planoContas_id
+
+	column valor
+		dataType: double
+		isHidden
+		lineageTag: c702bbb9-1ca9-4f3e-b2b2-cb18cf969e09
+		summarizeBy: none
+		sourceColumn: valor
+
+	column filial_id
+		dataType: string
+		isHidden
+		lineageTag: 33db007c-78ef-45c5-aff3-a393e3f382ca
+		summarizeBy: none
+		sourceColumn: filial_id
+
+	partition fPrevisao = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+				    Aba = Fonte{[Item="fPrevisao", Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"competencia_data", "planoContas_id", "valor", "filial_id"}),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"competencia_data", type date}, {"planoContas_id", type text}, {"valor", type number}, {"filial_id", type text}}, "pt-BR")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

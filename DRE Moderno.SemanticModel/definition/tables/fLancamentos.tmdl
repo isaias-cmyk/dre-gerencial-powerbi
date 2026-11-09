@@ -1,0 +1,955 @@
+table fLancamentos
+	lineageTag: 0f79e324-3c5c-40b3-8790-c3310baf141c
+
+	/// Realizado com sinal contábil: SUMX(valor × dPlanoConta[tipoLancamento]). Receitas positivas, custos e despesas negativos. Base de todas as medidas de realizado.
+	measure 'Valor Realizado' = SUMX(fLancamentos, fLancamentos[valor] * RELATED(dPlanoConta[tipoLancamento]))
+		formatString: #,##0.00
+		lineageTag: ee2133a1-2a48-44df-a722-627f7103bbf9
+
+	measure 'Registros Realizados' = COUNTROWS(fLancamentos)
+		formatString: 0
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 2a50d464-01f9-46d1-8d80-9da6d0f03d82
+
+	/// Realizado do grupo DRE 1 (receita operacional bruta).
+	measure 'Receita Bruta' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 40ea3794-024d-41eb-90a1-7674e65ffae1
+
+	measure 'Receita Bruta Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 774a99e0-6f01-42da-bfa7-a6598953c47b
+
+	measure 'Receita Bruta Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 08bc571b-dd4f-4064-b11a-4c30c0d1f145
+
+	/// Realizado do grupo DRE 2 (deduções da receita); valor negativo.
+	measure Deduções = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 4a74ef0b-60eb-4af3-a3dd-3c1cdeaabe18
+
+	measure 'Deduções Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 79e64622-67e9-4581-90da-99c969fbbf7b
+
+	measure 'Deduções Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 00d7f309-da67-4316-b7a4-e169aa48bd94
+
+	/// Receita bruta + deduções (grupos DRE 1 e 2).
+	measure 'Receita Líquida' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 1a1d027d-9c95-44c9-a7ea-4da24d79980f
+
+	measure 'Receita Líquida Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores previstos
+		lineageTag: 79027208-6fe4-4226-9629-5a2c05b6e5e0
+
+	measure 'Receita Líquida Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores previstos
+		lineageTag: 15320cd1-594c-419a-aa7c-18ecc28a3da5
+
+	/// Realizado do grupo DRE 4 (custos de mercadorias e serviços); valor negativo.
+	measure Custos = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: ee74d531-90b4-4bc6-bb51-b820e8782fe4
+
+	measure 'Custos Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: bdae0cc5-d7d0-4749-a6a0-26db7fda54c7
+
+	measure 'Custos Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 37e2d5ac-1def-4d8f-9089-1e0007fbe24d
+
+	/// Receita líquida + custos (grupos DRE 1, 2 e 4).
+	measure 'Lucro Bruto' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: eabe1f5d-7df2-4dfa-b5ca-590c3fcc1ef0
+
+	measure 'Lucro Bruto Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 86913fd3-aa07-4f0a-bbcf-2b131a02400d
+
+	measure 'Lucro Bruto Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 60802c04-90e9-44cf-b696-7d61dfb1fae4
+
+	/// Realizado do grupo DRE 6 (despesas operacionais); valor negativo.
+	measure 'Despesas Operacionais' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 906c6350-e2ac-4331-9734-49abd5e0396d
+
+	measure 'Despesas Operacionais Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores previstos
+		lineageTag: d5ee2168-ddfb-4d29-acdc-7bde9666e2aa
+
+	measure 'Despesas Operacionais Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: db053a35-761c-4e9b-b4fa-f75580a4d266
+
+	/// Realizado do grupo DRE 7 (receitas menos despesas financeiras).
+	measure 'Resultado Financeiro' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 0872c6ac-76c4-460c-ba87-1bc7713cc7bc
+
+	measure 'Resultado Financeiro Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 9c1c2175-6653-408c-9ce2-20b02a46a2bc
+
+	measure 'Resultado Financeiro Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 5f1a9b74-3f37-4405-aeab-43720eb1869a
+
+	measure 'Depreciação e Amortização' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: c3d71047-8053-47e1-ac87-2a0c10fd16cc
+
+	measure 'Depreciação e Amortização Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 5c8d6173-393b-4228-b74f-02d81d6b4686
+
+	measure 'Depreciação e Amortização Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 50017029-272f-4d5e-8be2-5954a9e68e64
+
+	measure 'Outras Receitas e Despesas' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: c83eb2f6-8838-4b6b-b1d2-e8269c3c4c8f
+
+	measure 'Outras Receitas e Despesas Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 20cb2d0b-38c0-4080-9a6d-b7c9f6c9a586
+
+	measure 'Outras Receitas e Despesas Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: a4e8baf2-d092-4595-a1e6-375174883bfa
+
+	/// Grupos DRE 1, 2, 4, 6 e 9: lucro bruto, despesas operacionais e depreciação. Exclui financeiro e outras receitas/despesas.
+	measure 'Resultado Operacional' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: b9e8f20c-1bb2-43bd-ae3d-527139df994f
+
+	measure 'Resultado Operacional Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 167e0ee6-e3ac-4162-bb94-860d10c786db
+
+	measure 'Resultado Operacional Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: b79843a9-3dbd-4cb0-be89-efa751e50bc6
+
+	measure 'Resultado Antes dos Tributos' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 0299b4cf-4bbc-4d7d-9011-851de88cfcb8
+
+	measure 'Resultado Antes dos Tributos Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: cde2c5bb-1eaf-457d-bf02-a3e2c908b036
+
+	measure 'Resultado Antes dos Tributos Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: b1b776b3-6c41-4874-82cd-6428fd0671f9
+
+	measure 'Tributos sobre Resultado' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: d2c62467-5e69-4cb2-ba3e-69ee3733a5d9
+
+	measure 'Tributos sobre Resultado Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 91d9dfb5-1b70-4a54-8b29-7fa88e4e4cbf
+
+	measure 'Tributos sobre Resultado Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 18c9fba7-5a10-4b03-bb0f-6b1517457157
+
+	/// Linha 13 da DRE: soma dos grupos 1, 2, 4, 6, 7, 9, 10 e 12.
+	measure 'Resultado Líquido' = CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores realizados
+		lineageTag: 9204e873-c30d-4fe4-830a-1ae9f4dbcd6e
+
+	measure 'Resultado Líquido Prevista' = CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores previstos
+		lineageTag: 038409a0-aaaa-468d-942c-5c0dc79d6354
+
+	measure 'Resultado Líquido Orçada' = CALCULATE([Valor Orçado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Indicadores previstos
+		lineageTag: bc9758dc-1b18-4f60-b9f5-fb186a4fb0c4
+
+	/// Lucro bruto ÷ receita líquida. Branco quando não há receita.
+	measure 'Margem Bruta %' = DIVIDE([Lucro Bruto], [Receita Líquida])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: DRE
+		lineageTag: 59811970-f84d-4d4e-8956-6c3458711deb
+
+	measure 'Margem Operacional %' = DIVIDE([Resultado Operacional], [Receita Líquida])
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 2a752f25-59dc-484b-a410-8ad293dc7291
+
+	/// Resultado líquido ÷ receita líquida. Branco quando não há receita.
+	measure 'Margem Líquida %' = DIVIDE([Resultado Líquido], [Receita Líquida])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: DRE
+		lineageTag: c83860e5-8697-4b3e-88f2-d20fcd2c51eb
+
+	measure 'Receita MTD' = CALCULATE([Receita Líquida], DATESMTD(dCalendario[Data]))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 9ab05a77-079e-4b17-a933-41559cd999d1
+
+	measure 'Resultado MTD' = CALCULATE([Resultado Líquido], DATESMTD(dCalendario[Data]))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: ba51e88a-7c65-44c9-825c-0d1641123a86
+
+	measure 'Realizado YTD' = CALCULATE([Resultado Líquido], DATESYTD(dCalendario[Data]))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 6728096e-bd15-4d17-bc65-b94f7c755865
+
+	measure 'Previsto YTD' = CALCULATE([Resultado Líquido Prevista], DATESYTD(dCalendario[Data]))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 8ecf083b-5ccc-47c7-86a7-ad7bdcc5cb0e
+
+	measure 'Resultado Ano Anterior' = CALCULATE([Resultado Líquido], DATEADD(dCalendario[Data], -1, YEAR))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 0df43240-0be2-4f05-b4fe-7e06b2b2c6b0
+
+	measure 'Variação YoY %' = IF(ISBLANK([Resultado Líquido]) || ISBLANK([Resultado Ano Anterior]), BLANK(), DIVIDE([Resultado Líquido]-[Resultado Ano Anterior], ABS([Resultado Ano Anterior])))
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 806fb5c0-147c-4c14-93ca-fbc17569542b
+
+	measure 'Receita Ano Anterior' = CALCULATE([Receita Líquida], DATEADD(dCalendario[Data], -1, YEAR))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: ef993e5f-f883-4864-bd8c-866283956f4a
+
+	measure 'Crescimento Receita %' = IF(ISBLANK([Receita Líquida]) || ISBLANK([Receita Ano Anterior]), BLANK(), DIVIDE([Receita Líquida]-[Receita Ano Anterior], ABS([Receita Ano Anterior])))
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 6fdfce84-e70d-49a8-9244-422406617b32
+
+	/// Receita líquida da filial ÷ receita líquida de todas as filiais selecionadas.
+	measure 'Participação Receita Filial %' = DIVIDE([Receita Líquida], CALCULATE([Receita Líquida], ALLSELECTED(dFilial)))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: DRE
+		lineageTag: be116ad8-9521-484e-ae76-6268e841d143
+
+	measure 'Participação Despesas Categoria %' = DIVIDE([Despesas Operacionais], CALCULATE([Despesas Operacionais], ALLSELECTED(dPlanoConta[descricaoN1])))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: DRE
+		lineageTag: f9fb2de1-0c4f-4196-b127-94c5e36fd091
+
+	measure 'Despesas para Gráfico' = -[Despesas Operacionais]
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: DRE
+		lineageTag: 8dfd71ec-2213-4ea5-a00a-c1a2cf425646
+
+	measure 'Custos para Gráfico' = -[Custos]
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: DRE
+		lineageTag: 357835f1-2315-4f09-a9f6-f3b53d96c1c0
+
+	measure 'Desvio Receita R$' = IF(NOT ISBLANK([Receita Líquida]), [Receita Líquida]-[Receita Líquida Prevista])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: f553102d-4c0f-466d-a41d-2884a927f289
+
+	measure 'Desvio Despesas R$' = IF(NOT ISBLANK([Despesas Operacionais]), [Despesas Operacionais]-[Despesas Operacionais Prevista])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 44005ab0-efd5-44dc-a2ed-316da0009896
+
+	measure 'Atingimento do Orçamento %' = DIVIDE([Receita Líquida], [Receita Líquida Orçada])
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 281e3557-7419-4f6a-8c89-733a5759cd15
+
+	measure 'Desvio Realizado x Previsto' = IF(NOT ISBLANK([Resultado Líquido]), [Resultado Líquido]-[Resultado Líquido Prevista])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: b65c2faa-6238-4775-89df-e280092bc3af
+
+	measure 'Desvio %' = DIVIDE([Desvio Realizado x Previsto], ABS([Resultado Líquido Prevista]))
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: ee19999b-74bd-42db-bafc-65e5016fdcda
+
+	/// Valor de cada uma das 13 linhas de dDRE pela composição de grupos (ex.: linha 5 = grupos 1, 2 e 4). Subtotais ficam em branco no detalhamento por conta.
+	measure 'DRE Base Realizado' =
+			VAR Detalhe = ISINSCOPE(dPlanoConta[descricaoN1]) || ISINSCOPE(dPlanoConta[descricaoN2])
+			VAR Subtotal = SELECTEDVALUE(dDRE[Subtotal], 0)
+			RETURN IF(Detalhe && Subtotal = 1, BLANK(), SWITCH(SELECTEDVALUE(dDRE[Ordem]),
+			1, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1})),
+			2, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2})),
+			3, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2})),
+			4, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4})),
+			5, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4})),
+			6, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6})),
+			7, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7})),
+			8, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7})),
+			9, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9})),
+			10, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10})),
+			11, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10})),
+			12, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12})),
+			13, CALCULATE([Valor Realizado], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12})), BLANK()))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: DRE
+		lineageTag: 984a3f7c-0e20-4e88-9354-160229ce98a8
+
+	/// DRE Base Realizado no modo escolhido em dPeriodo: Seleção, Acumulado no ano (YTD) ou Ano completo.
+	measure 'DRE Realizado' = SWITCH(SELECTEDVALUE(dPeriodo[Modo], "Seleção"), "Acumulado no ano", CALCULATE([DRE Base Realizado], DATESYTD(dCalendario[Data])), "Ano completo", CALCULATE([DRE Base Realizado], REMOVEFILTERS(dCalendario), VALUES(dCalendario[Ano])), [DRE Base Realizado])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: DRE
+		lineageTag: 11ca29b8-7672-4e6a-9210-4e9894fb5754
+
+	measure 'DRE Base Previsto' =
+			VAR Detalhe = ISINSCOPE(dPlanoConta[descricaoN1]) || ISINSCOPE(dPlanoConta[descricaoN2])
+			VAR Subtotal = SELECTEDVALUE(dDRE[Subtotal], 0)
+			RETURN IF(Detalhe && Subtotal = 1, BLANK(), SWITCH(SELECTEDVALUE(dDRE[Ordem]),
+			1, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1})),
+			2, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2})),
+			3, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2})),
+			4, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4})),
+			5, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4})),
+			6, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6})),
+			7, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7})),
+			8, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7})),
+			9, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9})),
+			10, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10})),
+			11, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10})),
+			12, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12})),
+			13, CALCULATE([Valor Previsto], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12})), BLANK()))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: d68553a5-a658-42ee-9e5b-57b462d2bc19
+
+	measure 'DRE Previsto' = SWITCH(SELECTEDVALUE(dPeriodo[Modo], "Seleção"), "Acumulado no ano", CALCULATE([DRE Base Previsto], DATESYTD(dCalendario[Data])), "Ano completo", CALCULATE([DRE Base Previsto], REMOVEFILTERS(dCalendario), VALUES(dCalendario[Ano])), [DRE Base Previsto])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 1684676e-0f6d-4221-9533-c00b8374985c
+
+	measure 'DRE Desvio R$' = IF(NOT ISBLANK([DRE Realizado]), [DRE Realizado]-[DRE Previsto])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: f7da9e57-9234-45d1-9cb1-a2d4fce38cf4
+
+	measure 'DRE Desvio %' = DIVIDE([DRE Desvio R$], ABS([DRE Previsto]))
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 45ab2ed2-eadd-4e5d-988b-da69c620a220
+
+	/// Análise vertical: linha da DRE ÷ receita líquida (linha 3) do mesmo contexto.
+	measure 'DRE AV %' =
+			VAR Receita = CALCULATE([DRE Realizado], REMOVEFILTERS(dDRE), dDRE[Ordem]=3, REMOVEFILTERS(dPlanoConta[descricaoN1],dPlanoConta[descricaoN2]))
+			RETURN DIVIDE([DRE Realizado], Receita)
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: DRE
+		lineageTag: eefb2a26-d145-4231-84d9-ea656e35eb91
+
+	measure 'DRE Ano Anterior' = CALCULATE([DRE Realizado], DATEADD(dCalendario[Data], -1, YEAR))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		isHidden
+		displayFolder: _Legado
+		lineageTag: a50a196c-7adc-4981-a2aa-ba2f6d8898a5
+
+	measure 'DRE AH %' = IF(ISBLANK([DRE Realizado]) || ISBLANK([DRE Ano Anterior]), BLANK(), DIVIDE([DRE Realizado]-[DRE Ano Anterior], ABS([DRE Ano Anterior])))
+		formatString: 0.0%;(0.0%);0.0%
+		isHidden
+		displayFolder: _Legado
+		lineageTag: ae972bc6-1a61-48e2-9e29-65052736b49c
+
+	measure 'DRE Cor Desvio' = IF(ISBLANK([DRE Desvio R$]), "#454545", IF([DRE Desvio R$]>=0,"#254B3F","#A33F36"))
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 9c0bfdb6-945a-43f9-b39e-f69c8a7ae86a
+
+	measure 'DRE Cor Linha' = IF(SELECTEDVALUE(dDRE[Subtotal])=1,"#254B3F","#454545")
+		displayFolder: Formatação
+		lineageTag: 1ba80bf4-890a-4637-8230-67d98dc588db
+
+	measure 'DRE Peso Linha' = IF(SELECTEDVALUE(dDRE[Subtotal])=1,"bold","normal")
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 32cdd9a4-9bd1-482c-92de-1e6e4bae805a
+
+	measure 'DRE Situação' = IF(ISBLANK([DRE Realizado]), BLANK(), IF([DRE Desvio R$]>0,"↑ Favorável",IF([DRE Desvio R$]<0,"↓ Desfavorável","= Em linha")))
+		isHidden
+		displayFolder: _Legado
+		lineageTag: 4b03b3c4-e39c-43e3-96cd-2fdb4014d70f
+
+	measure 'Meses Realizados no Contexto' = COUNTROWS(CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE)))
+		formatString: 0
+		displayFolder: Executivo/Cobertura
+		lineageTag: ff7ca921-9afe-49fa-a270-16ceda608002
+
+	/// 1 quando há um único ano selecionado e todos os seus meses com realizado existem no ano anterior; senão 0. Controla as comparações com o ano anterior.
+	measure 'Comparação AA Disponível' =
+			VAR Atual = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior = SELECTCOLUMNS(Atual,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			VAR Existe = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dCalendario), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE), TREATAS(Anterior,dCalendario[Data]))
+			RETURN IF(HASONEVALUE(dCalendario[Ano]) && COUNTROWS(Atual)>0 && COUNTROWS(Existe)=COUNTROWS(Atual),1,0)
+		formatString: 0
+		displayFolder: Executivo/Cobertura
+		lineageTag: dc9750bb-a55c-4cca-a3fb-f0107795d6a2
+
+	/// Orçamento restrito às competências que têm realizado no contexto (o realizado termina em mai/2023). Evita comparar meses realizados com o ano orçado inteiro.
+	measure 'Orçamento Comparável' =
+			VAR Datas = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			RETURN IF(COUNTROWS(Datas)>0, CALCULATE([Valor Orçado], KEEPFILTERS(TREATAS(Datas,dCalendario[Data]))))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 8236c49b-90ad-4505-bc1f-72310b5e33f4
+
+	/// Realizado − orçamento comparável, ambos com sinal. Positivo = favorável (mais receita ou menos gasto).
+	measure 'Impacto Orçamentário R$' =
+			VAR Real = [Valor Realizado]
+			VAR Orc = [Orçamento Comparável]
+			RETURN IF(NOT ISBLANK(Real) && NOT ISBLANK(Orc), Real-Orc)
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 10346b31-da5a-493b-8802-0b5ddb386df5
+
+	measure 'Impacto Orçamentário %' = DIVIDE([Impacto Orçamentário R$],ABS([Orçamento Comparável]))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: 8a1082f4-8c52-4fec-a007-4b1ddee7f12f
+
+	measure 'Cor Impacto Orçamentário' =
+			VAR V = [Impacto Orçamentário R$]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 7ef90587-e6a9-4e82-ab53-992b9cb054ed
+
+	measure 'Receita Líquida Orçamento Comparável' = CALCULATE([Orçamento Comparável],KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 1c4c4e9d-5c98-412c-a012-ecb57d1a5134
+
+	/// Receita líquida dos mesmos meses do ano anterior (deslocamento de 12 meses das competências realizadas). Branco sem base comparável.
+	measure 'Receita Líquida AA Comparável' =
+			VAR Datas = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior = SELECTCOLUMNS(Datas,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			RETURN IF([Comparação AA Disponível]=1,CALCULATE([Receita Líquida],REMOVEFILTERS(dCalendario),TREATAS(Anterior,dCalendario[Data])))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 91ad3d2a-bedd-4702-a0c5-be181752ebcf
+
+	measure 'Receita Líquida Δ AA' = IF(NOT ISBLANK([Receita Líquida]) && NOT ISBLANK([Receita Líquida AA Comparável]), [Receita Líquida]-[Receita Líquida AA Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: e091d46e-73d7-4bd3-a7ae-138b1fd8a6fa
+
+	measure 'Receita Líquida Δ Orçamento' = IF(NOT ISBLANK([Receita Líquida]) && NOT ISBLANK([Receita Líquida Orçamento Comparável]), [Receita Líquida]-[Receita Líquida Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 30f10098-b8b6-45ec-b558-315fc63e977c
+
+	measure 'Receita Líquida Comparativos' =
+			VAR AA = [Receita Líquida Δ AA]
+			VAR Orc = [Receita Líquida Δ Orçamento]
+			VAR AAPct = DIVIDE(AA,ABS([Receita Líquida AA Comparável]))
+			VAR OrcPct = DIVIDE(Orc,ABS([Receita Líquida Orçamento Comparável]))
+			RETURN IF(ISBLANK([Receita Líquida]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível", "AA: " & FORMAT(AA/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(AAPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível", "Orç: " & FORMAT(Orc/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(OrcPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: aa4b3654-14a7-4935-99d8-6e677c7003ee
+
+	measure 'Receita Líquida Cor Executivo' =
+			VAR V=[Receita Líquida Δ Orçamento]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 0f15dfc5-60f5-431c-bfe4-9637f0b77e6b
+
+	measure 'Lucro Bruto Orçamento Comparável' = CALCULATE([Orçamento Comparável],KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 40ec4116-e4b6-45fa-9595-bb8a22c25e9d
+
+	measure 'Lucro Bruto AA Comparável' =
+			VAR Datas = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior = SELECTCOLUMNS(Datas,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			RETURN IF([Comparação AA Disponível]=1,CALCULATE([Lucro Bruto],REMOVEFILTERS(dCalendario),TREATAS(Anterior,dCalendario[Data])))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 48a12b59-23ae-42d1-bb15-664bba73bacf
+
+	measure 'Lucro Bruto Δ AA' = IF(NOT ISBLANK([Lucro Bruto]) && NOT ISBLANK([Lucro Bruto AA Comparável]), [Lucro Bruto]-[Lucro Bruto AA Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: dddd9f9e-f43a-4e6f-82d2-2a024dad9d4b
+
+	measure 'Lucro Bruto Δ Orçamento' = IF(NOT ISBLANK([Lucro Bruto]) && NOT ISBLANK([Lucro Bruto Orçamento Comparável]), [Lucro Bruto]-[Lucro Bruto Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 86f062dd-60a0-43b7-a911-879c7fa28ad1
+
+	measure 'Lucro Bruto Comparativos' =
+			VAR AA = [Lucro Bruto Δ AA]
+			VAR Orc = [Lucro Bruto Δ Orçamento]
+			VAR AAPct = DIVIDE(AA,ABS([Lucro Bruto AA Comparável]))
+			VAR OrcPct = DIVIDE(Orc,ABS([Lucro Bruto Orçamento Comparável]))
+			RETURN IF(ISBLANK([Lucro Bruto]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível", "AA: " & FORMAT(AA/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(AAPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível", "Orç: " & FORMAT(Orc/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(OrcPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: c28366a0-235f-4630-8796-f167863fcbec
+
+	measure 'Lucro Bruto Cor Executivo' =
+			VAR V=[Lucro Bruto Δ Orçamento]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 661cc02f-ea9c-4c65-8c34-44e73511bbfe
+
+	measure 'Resultado Operacional Orçamento Comparável' = CALCULATE([Orçamento Comparável],KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,9}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: b185d050-1903-4a9d-a36b-05d1a6008afd
+
+	measure 'Resultado Operacional AA Comparável' =
+			VAR Datas = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior = SELECTCOLUMNS(Datas,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			RETURN IF([Comparação AA Disponível]=1,CALCULATE([Resultado Operacional],REMOVEFILTERS(dCalendario),TREATAS(Anterior,dCalendario[Data])))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: f16561ee-3303-4917-ac24-97b381bef4d6
+
+	measure 'Resultado Operacional Δ AA' = IF(NOT ISBLANK([Resultado Operacional]) && NOT ISBLANK([Resultado Operacional AA Comparável]), [Resultado Operacional]-[Resultado Operacional AA Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 22a45af6-c283-4069-be57-ffff5bffc342
+
+	measure 'Resultado Operacional Δ Orçamento' = IF(NOT ISBLANK([Resultado Operacional]) && NOT ISBLANK([Resultado Operacional Orçamento Comparável]), [Resultado Operacional]-[Resultado Operacional Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 2994fd1e-a2d7-45be-8d2f-ebcd12d479f2
+
+	measure 'Resultado Operacional Comparativos' =
+			VAR AA = [Resultado Operacional Δ AA]
+			VAR Orc = [Resultado Operacional Δ Orçamento]
+			VAR AAPct = DIVIDE(AA,ABS([Resultado Operacional AA Comparável]))
+			VAR OrcPct = DIVIDE(Orc,ABS([Resultado Operacional Orçamento Comparável]))
+			RETURN IF(ISBLANK([Resultado Operacional]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível", "AA: " & FORMAT(AA/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(AAPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível", "Orç: " & FORMAT(Orc/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(OrcPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: 0b6f4cb5-0cb5-4529-ae71-1f4650e4bf30
+
+	measure 'Resultado Operacional Cor Executivo' =
+			VAR V=[Resultado Operacional Δ Orçamento]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 240339f9-05b2-4575-bdfc-fffd3558e53f
+
+	measure 'Resultado Líquido Orçamento Comparável' = CALCULATE([Orçamento Comparável],KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12}))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: eadf391e-7db4-4216-b04e-fcf16448e73f
+
+	/// Resultado líquido dos mesmos meses do ano anterior. Branco sem base comparável.
+	measure 'Resultado Líquido AA Comparável' =
+			VAR Datas = CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior = SELECTCOLUMNS(Datas,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			RETURN IF([Comparação AA Disponível]=1,CALCULATE([Resultado Líquido],REMOVEFILTERS(dCalendario),TREATAS(Anterior,dCalendario[Data])))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: 4d26d465-f765-4777-bbfe-183f593ee70c
+
+	measure 'Resultado Líquido Δ AA' = IF(NOT ISBLANK([Resultado Líquido]) && NOT ISBLANK([Resultado Líquido AA Comparável]), [Resultado Líquido]-[Resultado Líquido AA Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: b702609c-ea08-49f0-a7cf-1782d86eccf3
+
+	measure 'Resultado Líquido Δ Orçamento' = IF(NOT ISBLANK([Resultado Líquido]) && NOT ISBLANK([Resultado Líquido Orçamento Comparável]), [Resultado Líquido]-[Resultado Líquido Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo
+		lineageTag: bdd03e8b-058c-43b2-b468-c4582e9ad91e
+
+	measure 'Resultado Líquido Comparativos' =
+			VAR AA = [Resultado Líquido Δ AA]
+			VAR Orc = [Resultado Líquido Δ Orçamento]
+			VAR AAPct = DIVIDE(AA,ABS([Resultado Líquido AA Comparável]))
+			VAR OrcPct = DIVIDE(Orc,ABS([Resultado Líquido Orçamento Comparável]))
+			RETURN IF(ISBLANK([Resultado Líquido]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível", "AA: " & FORMAT(AA/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(AAPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível", "Orç: " & FORMAT(Orc/1000000,"+0.00;-0.00;0.00","pt-BR") & " mi (" & FORMAT(OrcPct,"+0.0%;-0.0%;0.0%","pt-BR") & ")") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: a10bdbc8-a835-4790-81f4-5ea4536b71d9
+
+	measure 'Resultado Líquido Cor Executivo' =
+			VAR V=[Resultado Líquido Δ Orçamento]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 982a6a4a-686d-4b84-b602-168f9180cae8
+
+	measure 'Margem Bruta AA Comparável' = DIVIDE([Lucro Bruto AA Comparável],[Receita Líquida AA Comparável])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: e79fc988-f335-495b-83cf-1ab3415304a8
+
+	measure 'Margem Bruta Orçamento Comparável' = DIVIDE([Lucro Bruto Orçamento Comparável],[Receita Líquida Orçamento Comparável])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: a2600f23-211e-4625-901e-8bb4859a8310
+
+	measure 'Margem Bruta Δ AA p.p.' = IF(NOT ISBLANK([Margem Bruta %]) && NOT ISBLANK([Margem Bruta AA Comparável]),100*([Margem Bruta %]-[Margem Bruta AA Comparável]))
+		formatString: 0.0" p.p.";(0.0)" p.p.";0.0" p.p."
+		displayFolder: Executivo
+		lineageTag: 093bfaa4-dd8b-4a46-8699-3b172593db38
+
+	measure 'Margem Bruta Δ Orçamento p.p.' = IF(NOT ISBLANK([Margem Bruta %]) && NOT ISBLANK([Margem Bruta Orçamento Comparável]),100*([Margem Bruta %]-[Margem Bruta Orçamento Comparável]))
+		formatString: 0.0" p.p.";(0.0)" p.p.";0.0" p.p."
+		displayFolder: Executivo
+		lineageTag: 8f64eb55-a71d-4754-aacc-878bcb8999dc
+
+	measure 'Margem Bruta Comparativos' =
+			VAR AA=[Margem Bruta Δ AA p.p.]
+			VAR Orc=[Margem Bruta Δ Orçamento p.p.]
+			RETURN IF(ISBLANK([Margem Bruta %]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível","AA: " & FORMAT(AA,"+0.0;-0.0;0.0","pt-BR") & " p.p.") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível","Orç: " & FORMAT(Orc,"+0.0;-0.0;0.0","pt-BR") & " p.p.") & UNICHAR(10) & IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: 2c839ee8-3c7c-4fbd-9bf4-e8b2bb031816
+
+	measure 'Margem Bruta Cor Executivo' =
+			VAR V=[Margem Bruta Δ Orçamento p.p.]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 13718a94-0628-4e64-b836-6a849511eeec
+
+	measure 'Margem Líquida AA Comparável' = DIVIDE([Resultado Líquido AA Comparável],[Receita Líquida AA Comparável])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: a2ec56db-00f5-4b85-ad9e-f7bff4c285f7
+
+	measure 'Margem Líquida Orçamento Comparável' = DIVIDE([Resultado Líquido Orçamento Comparável],[Receita Líquida Orçamento Comparável])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: 6ddac4ad-fcf3-49b0-ba02-5ead4eedcb43
+
+	measure 'Margem Líquida Δ AA p.p.' = IF(NOT ISBLANK([Margem Líquida %]) && NOT ISBLANK([Margem Líquida AA Comparável]),100*([Margem Líquida %]-[Margem Líquida AA Comparável]))
+		formatString: 0.0" p.p.";(0.0)" p.p.";0.0" p.p."
+		displayFolder: Executivo
+		lineageTag: 9242749e-29ce-4257-99bd-b57acc779b24
+
+	measure 'Margem Líquida Δ Orçamento p.p.' = IF(NOT ISBLANK([Margem Líquida %]) && NOT ISBLANK([Margem Líquida Orçamento Comparável]),100*([Margem Líquida %]-[Margem Líquida Orçamento Comparável]))
+		formatString: 0.0" p.p.";(0.0)" p.p.";0.0" p.p."
+		displayFolder: Executivo
+		lineageTag: 7b832ad0-4969-48dc-bc8e-ad5bd86150a3
+
+	measure 'Margem Líquida Comparativos' =
+			VAR AA=[Margem Líquida Δ AA p.p.]
+			VAR Orc=[Margem Líquida Δ Orçamento p.p.]
+			RETURN IF(ISBLANK([Margem Líquida %]),"Sem realizado no período",
+			IF(ISBLANK(AA),"AA: comparação indisponível","AA: " & FORMAT(AA,"+0.0;-0.0;0.0","pt-BR") & " p.p.") & UNICHAR(10) &
+			IF(ISBLANK(Orc),"Orçamento indisponível","Orç: " & FORMAT(Orc,"+0.0;-0.0;0.0","pt-BR") & " p.p.") & UNICHAR(10) & IF(ISBLANK(Orc),"",IF(Orc>0,"↑ Favorável vs orçamento",IF(Orc<0,"↓ Desfavorável vs orçamento","Em linha com orçamento"))))
+		displayFolder: Executivo/Cartões
+		lineageTag: 313ee34f-ec07-41a6-a833-e6b20f035e7f
+
+	measure 'Margem Líquida Cor Executivo' =
+			VAR V=[Margem Líquida Δ Orçamento p.p.]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: b0222bc4-afbd-498c-b35c-176225ee1ac4
+
+	measure 'Receita Desvio Orçamento %' = DIVIDE([Receita Líquida Δ Orçamento],ABS([Receita Líquida Orçamento Comparável]))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: e53ccd73-489e-4be5-8e59-b72edd6459c9
+
+	measure 'Resultado Desvio Orçamento %' = DIVIDE([Resultado Líquido Δ Orçamento],ABS([Resultado Líquido Orçamento Comparável]))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo
+		lineageTag: cd4e97f2-9287-4c2d-8298-c3453f89fcc2
+
+	measure 'DRE Base Orçamento Comparável' =
+			VAR Detalhe = ISINSCOPE(dPlanoConta[descricaoN1]) || ISINSCOPE(dPlanoConta[descricaoN2])
+			VAR Subtotal = SELECTEDVALUE(dDRE[Subtotal], 0)
+			RETURN IF(Detalhe && Subtotal = 1, BLANK(), SWITCH(SELECTEDVALUE(dDRE[Ordem]),
+			1, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1})),
+			2, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {2})),
+			3, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2})),
+			4, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {4})),
+			5, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4})),
+			6, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {6})),
+			7, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {7})),
+			8, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7})),
+			9, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {9})),
+			10, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {10})),
+			11, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10})),
+			12, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {12})),
+			13, CALCULATE([Orçamento Comparável], KEEPFILTERS(dPlanoConta[GrupoDRE] IN {1,2,4,6,7,9,10,12})), BLANK()))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: 950016a6-7ff3-4c1e-9c4b-15544a4ed7e0
+
+	/// Linha da DRE no orçamento comparável, no mesmo modo de período da DRE Realizado.
+	measure 'DRE Orçamento Comparável' = SWITCH(SELECTEDVALUE(dPeriodo[Modo],"Seleção"),"Acumulado no ano",CALCULATE([DRE Base Orçamento Comparável],DATESYTD(dCalendario[Data])),"Ano completo",CALCULATE([DRE Base Orçamento Comparável],REMOVEFILTERS(dCalendario),VALUES(dCalendario[Ano])),[DRE Base Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: 9f872d3d-4bfe-4c5b-8628-1cfe8293fdb5
+
+	measure 'DRE Impacto Orçamentário R$' = IF(NOT ISBLANK([DRE Realizado]) && NOT ISBLANK([DRE Orçamento Comparável]),[DRE Realizado]-[DRE Orçamento Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: a33db01c-8f8e-4c70-876f-13e747fab31c
+
+	measure 'DRE Impacto Orçamentário %' = DIVIDE([DRE Impacto Orçamentário R$],ABS([DRE Orçamento Comparável]))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo/DRE
+		lineageTag: 13e10248-d6ab-46d9-acf3-57ac5bdfea8b
+
+	measure 'DRE Cor Orçamento' =
+			VAR V=[DRE Impacto Orçamentário R$]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: fb758c21-0f51-410b-8b97-4111ee22d113
+
+	measure 'DRE Base AA Comparável' =
+			VAR Datas=CALCULATETABLE(VALUES(fLancamentos[competencia_data]), REMOVEFILTERS(dPlanoConta), REMOVEFILTERS(dEstruturaDRE), REMOVEFILTERS(dDRE))
+			VAR Anterior=SELECTCOLUMNS(Datas,"DataAA",EDATE(fLancamentos[competencia_data],-12))
+			RETURN IF([Comparação AA Disponível]=1,CALCULATE([DRE Base Realizado],REMOVEFILTERS(dCalendario),TREATAS(Anterior,dCalendario[Data])))
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: e22e171d-b005-4806-8f0b-aa035b3e0901
+
+	measure 'DRE AA Comparável' = SWITCH(SELECTEDVALUE(dPeriodo[Modo],"Seleção"),"Acumulado no ano",CALCULATE([DRE Base AA Comparável],DATESYTD(dCalendario[Data])),"Ano completo",CALCULATE([DRE Base AA Comparável],REMOVEFILTERS(dCalendario),VALUES(dCalendario[Ano])),[DRE Base AA Comparável])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: e3872976-80bf-46e6-800a-6c0ce2801c98
+
+	/// Análise horizontal: variação contra os mesmos meses do ano anterior, dividida pelo módulo da base. Branco sem base (nunca −100%).
+	measure 'DRE AH Comparável %' = IF(NOT ISBLANK([DRE Realizado]) && NOT ISBLANK([DRE AA Comparável]),DIVIDE([DRE Realizado]-[DRE AA Comparável],ABS([DRE AA Comparável])))
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo/DRE
+		lineageTag: fff6b552-c2ed-47d6-95b5-1129548637ff
+
+	measure 'DRE Resultado Operacional' = SWITCH(SELECTEDVALUE(dPeriodo[Modo],"Seleção"),"Acumulado no ano",CALCULATE([Resultado Operacional],DATESYTD(dCalendario[Data])),"Ano completo",CALCULATE([Resultado Operacional],REMOVEFILTERS(dCalendario),VALUES(dCalendario[Ano])),[Resultado Operacional])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: 32898073-ede9-4f9f-9ff3-0153002879d8
+
+	measure 'DRE Impacto Conta R$' = SWITCH(SELECTEDVALUE(dPeriodo[Modo],"Seleção"),"Acumulado no ano",CALCULATE([Impacto Orçamentário R$],DATESYTD(dCalendario[Data])),"Ano completo",CALCULATE([Impacto Orçamentário R$],REMOVEFILTERS(dCalendario),VALUES(dCalendario[Ano])),[Impacto Orçamentário R$])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/DRE
+		lineageTag: 1a05e37c-af24-42e2-a0ad-f4250f71dcc5
+
+	measure 'DRE Impacto Conta %' = SWITCH(SELECTEDVALUE(dPeriodo[Modo],"Seleção"),"Acumulado no ano",CALCULATE([Impacto Orçamentário %],DATESYTD(dCalendario[Data])),"Ano completo",CALCULATE([Impacto Orçamentário %],REMOVEFILTERS(dCalendario),VALUES(dCalendario[Ano])),[Impacto Orçamentário %])
+		formatString: 0.0%;(0.0%);0.0%
+		displayFolder: Executivo/DRE
+		lineageTag: aca34327-22cb-4a26-b62e-4dcec48927a8
+
+	measure 'DRE Cor Impacto Conta' =
+			VAR V=[DRE Impacto Conta R$]
+			RETURN IF(ISBLANK(V),"#454545",IF(V>=0,"#254B3F","#A33F36"))
+		displayFolder: Executivo/Formatação
+		lineageTag: 5d83e9c6-ee25-460d-b663-8a9f24ccf174
+
+	measure 'Ranking Impacto Conta' =
+			VAR V=[DRE Impacto Conta R$]
+			RETURN IF(NOT ISBLANK(V), RANKX(ALLSELECTED(dPlanoConta[descricaoN2]),ABS([DRE Impacto Conta R$]),ABS(V),DESC,Dense))
+		formatString: 0
+		displayFolder: Executivo/Desvios
+		lineageTag: 63f4c883-163a-4b9f-bb70-333597b7e19e
+
+	/// Impacto orçamentário das 8 contas (descricaoN2) com maior impacto absoluto no contexto.
+	measure 'Top 8 Impacto Conta' = IF([Ranking Impacto Conta]<=8 && NOT ISBLANK([Ranking Impacto Conta]),[DRE Impacto Conta R$])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/Desvios
+		lineageTag: f0fc0dac-226e-46e0-9ee6-6ca70114f89b
+
+	/// Linhas 3, 4, 6, 7, 9, 10 e 12 para a cascata; o total da cascata é igual ao resultado líquido.
+	measure 'Componente Waterfall DRE' = IF(SELECTEDVALUE(dDRE[Ordem]) IN {3,4,6,7,9,10,12},[DRE Realizado])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/Waterfall
+		lineageTag: 3c33ffe5-ff49-4772-ab96-1d3309ba6343
+
+	measure 'Resultado Mensal Negativo' = IF([Resultado Líquido]<0,[Resultado Líquido])
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/Gráficos
+		lineageTag: b244a96a-7b26-4eca-bcea-31938afe087f
+
+	measure 'Referência Zero' = IF(NOT ISBLANK([Resultado Líquido]) || NOT ISBLANK([Resultado Líquido Orçada]),0)
+		formatString: "R$" #,##0.00;("R$" #,##0.00);"R$" 0.00
+		displayFolder: Executivo/Gráficos
+		lineageTag: 55053fe6-b4cb-4e24-a747-4257b47fe980
+
+	/// Texto do cabeçalho: ano ou faixa de anos, filial e quantidade de meses com realizado.
+	measure 'Contexto Executivo' =
+			VAR AnoMin = MIN(dCalendario[Ano])
+			VAR AnoMax = MAX(dCalendario[Ano])
+			VAR Anos = IF(AnoMin = AnoMax, FORMAT(AnoMin, "0"), FORMAT(AnoMin, "0") & "–" & FORMAT(AnoMax, "0"))
+			RETURN "XPBucks • " & Anos & " • " & IF(HASONEVALUE(dFilial[Filial]), SELECTEDVALUE(dFilial[Filial]), "Filiais selecionadas") & " • " & FORMAT([Meses Realizados no Contexto], "0") & " meses com realizado"
+		displayFolder: Executivo/Texto
+		lineageTag: 3d0d2781-3d56-4189-9941-e636361eaa0f
+
+	measure 'Insight Receita' =
+			VAR V=[Receita Líquida Δ Orçamento]
+			RETURN IF(ISBLANK(V),"Receita: comparação orçamentária indisponível.","Receita " & IF(V>=0,"acima","abaixo") & " do orçamento em " & FORMAT(ABS(V)/1000000,"0.00","pt-BR") & " mi, nos meses com realizado.")
+		displayFolder: Executivo/Insights
+		lineageTag: 25d72761-2088-44fb-8156-11200fe2e1a7
+
+	measure 'Insight Margem' =
+			VAR V=[Margem Bruta Δ AA p.p.]
+			RETURN IF(ISBLANK(V),"Margem: selecione um ano com base anterior comparável.","Margem bruta " & IF(V>=0,"aumentou ","diminuiu ") & FORMAT(ABS(V),"0.0","pt-BR") & " p.p. frente aos mesmos meses do ano anterior.")
+		displayFolder: Executivo/Insights
+		lineageTag: 7df9e964-c90d-4bf1-b3f0-1938df378fdc
+
+	measure 'Insight Custos' =
+			VAR V=CALCULATE([Impacto Orçamentário R$],KEEPFILTERS(dPlanoConta[GrupoDRE]=4))
+			RETURN IF(ISBLANK(V),"Custos: comparação indisponível.","Custos: impacto " & IF(V>=0,"favorável","desfavorável") & " de " & FORMAT(ABS(V)/1000000,"0.00","pt-BR") & " mi frente ao orçamento comparável.")
+		displayFolder: Executivo/Insights
+		lineageTag: 185a16bf-bfd1-4cd3-bfa4-5b09bb144875
+
+	measure 'Insight Filial' =
+			VAR T=FILTER(ADDCOLUMNS(ALLSELECTED(dFilial[Filial]),"Valor",[Resultado Líquido]),NOT ISBLANK([Valor]))
+			VAR Lider=TOPN(1,T,[Valor],DESC,dFilial[Filial],ASC)
+			RETURN IF(COUNTROWS(T)=0,"Filiais: sem realizado no contexto.","Maior resultado entre as filiais selecionadas: " & CONCATENATEX(Lider,dFilial[Filial],", ") & " (R$ " & FORMAT(MAXX(Lider,[Valor])/1000000,"0.00","pt-BR") & " mi).")
+		displayFolder: Executivo/Insights
+		lineageTag: 9a7c2027-432f-4d58-805e-97e80f8fbc69
+
+	measure 'Insight Despesa' =
+			VAR T=CALCULATETABLE(ADDCOLUMNS(ALLSELECTED(dPlanoConta[descricaoN2]),"Impacto",[DRE Impacto Conta R$]),KEEPFILTERS(dPlanoConta[GrupoDRE]=6))
+			VAR Neg=FILTER(T,NOT ISBLANK([Impacto]) && [Impacto]<0)
+			VAR Lider=TOPN(1,Neg,[Impacto],ASC,dPlanoConta[descricaoN2],ASC)
+			RETURN IF(ISBLANK([DRE Resultado Operacional]),"Despesas: sem realizado no contexto.",IF(COUNTROWS(Neg)=0,"Nenhum desvio desfavorável de despesa no contexto comparável.","Maior desvio desfavorável de despesa: " & CONCATENATEX(Lider,dPlanoConta[descricaoN2],", ") & " (R$ " & FORMAT(ABS(MINX(Lider,[Impacto]))/1000,"0.0","pt-BR") & " mil)."))
+		displayFolder: Executivo/Insights
+		lineageTag: 6c081089-743c-4f2a-8d12-4d315b04b293
+
+	measure 'Síntese Executiva' = [Insight Receita] & UNICHAR(10) & [Insight Margem] & UNICHAR(10) & [Insight Filial]
+		displayFolder: Executivo/Insights
+		lineageTag: 379fa268-216c-4aec-a98c-859195cdd10b
+
+	column competencia_data
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: dd523cc2-b44b-4b15-b8c4-30792b69d974
+		summarizeBy: none
+		sourceColumn: competencia_data
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column planoContas_id
+		dataType: string
+		isHidden
+		lineageTag: 1a97a792-ce4a-4bf9-aa4d-0f74e12f3e8c
+		summarizeBy: none
+		sourceColumn: planoContas_id
+
+	column valor
+		dataType: double
+		isHidden
+		lineageTag: a5a30ecf-21f1-4ad2-bb73-c019a6dccb8a
+		summarizeBy: none
+		sourceColumn: valor
+
+	column filial_id
+		dataType: string
+		isHidden
+		lineageTag: e0a03dd6-6fbc-4dbe-9e60-08a6bcdb2fad
+		summarizeBy: none
+		sourceColumn: filial_id
+
+	partition fLancamentos = m
+		mode: import
+		source =
+				let
+				    Consolidado = Table.Combine({fLancamento1_ano1, fLancamento1_ano2, fLancamento1_ano3, fLancamento2_ano1, fLancamento2_ano2, fLancamento2_ano3, fLancamento3_ano1, fLancamento3_ano2, fLancamento3_ano3})
+				in
+				    Consolidado
+
+	annotation PBI_ResultType = Table
+

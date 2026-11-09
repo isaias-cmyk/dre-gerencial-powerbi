@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "DRE Moderno"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bb2aed35-23d2-4184-8d00-6d7e8db6c810"
+  }
+}

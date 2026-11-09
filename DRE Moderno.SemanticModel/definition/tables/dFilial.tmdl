@@ -1,0 +1,29 @@
+table dFilial
+	lineageTag: 68077b9a-35ee-4170-b030-5173d8ccac43
+
+	column id
+		dataType: string
+		isHidden
+		isKey
+		lineageTag: 61050364-3dcf-47ca-a039-62376181b017
+		summarizeBy: none
+		sourceColumn: id
+
+	column Filial
+		dataType: string
+		lineageTag: 567ddaef-2e7f-4095-967a-ee698f81fab8
+		summarizeBy: none
+		sourceColumn: Filial
+
+	partition dFilial = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(pArquivoBase), null, true),
+				    Aba = Fonte{[Item="dFilial", Kind="Sheet"]}[Data],
+				    Cabecalhos = Table.PromoteHeaders(Aba, [PromoteAllScalars=true]),
+				    Colunas = Table.SelectColumns(Cabecalhos, {"id", "Filial"}),
+				    Tipos = Table.TransformColumnTypes(Colunas, {{"id", type text}, {"Filial", type text}}, "pt-BR")
+				in
+				    Tipos
+

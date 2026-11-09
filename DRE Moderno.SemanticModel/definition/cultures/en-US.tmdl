@@ -1,0 +1,431 @@
+cultureInfo en-US
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "dplanoconta.descricaon1": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dPlanoConta",
+			          "ConceptualProperty": "descricaoN1"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Grupo de contas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dplanoconta.descricaon2": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "dPlanoConta",
+			          "ConceptualProperty": "descricaoN2"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Conta": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_realizado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Realizado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Realizado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_previsto": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Previsto"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.dre_desvio_r": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Desvio R$"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.dre_desvio_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Desvio %"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.dre_av_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE AV %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "AV %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_ah_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE AH %"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.participação_receita_filial_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Participação Receita Filial %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Participação %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.receita_líquida_prevista": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Receita Líquida Prevista"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.despesas_operacionais_prevista": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Despesas Operacionais Prevista"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.participação_despesas_categoria_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Participação Despesas Categoria %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Participação %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.atingimento_do_orçamento_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Atingimento do Orçamento %"
+			        }
+			      },
+			      "State": "Generated"
+			    },
+			    "flancamentos.receita_líquida_δ_orçamento": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Receita Líquida Δ Orçamento"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento R$": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.resultado_líquido_δ_orçamento": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Resultado Líquido Δ Orçamento"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ resultado / orçamento": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_orçamento_comparável": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Orçamento Comparável"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Orçado comparável": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_impacto_orçamentário_r": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Impacto Orçamentário R$"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento R$": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_impacto_orçamentário_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE Impacto Orçamentário %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.dre_ah_comparável_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "DRE AH Comparável %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "AH comparável %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.impacto_orçamentário_r": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Impacto Orçamentário R$"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento R$": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.impacto_orçamentário_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Impacto Orçamentário %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.receita_desvio_orçamento_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Receita Desvio Orçamento %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Δ orçamento %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.receita_líquida_orçamento_comparável": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Receita Líquida Orçamento Comparável"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Orçado comparável": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "flancamentos.orçamento_comparável": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "fLancamentos",
+			          "ConceptualProperty": "Orçamento Comparável"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Orçado comparável": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

@@ -1,0 +1,20 @@
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+# Desenvolvimento local e segredos
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+secrets/
+artifacts/
+node_modules/
+*.log
+
+# Bases locais de negócio (não versionar)
+# data/processed/ é publicada neste repositório (base autorizada)
+
+# Briefings e binários do Power BI (não versionar)
+*.pptx
+*.pbix

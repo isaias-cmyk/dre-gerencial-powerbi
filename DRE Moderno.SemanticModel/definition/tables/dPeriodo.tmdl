@@ -1,0 +1,18 @@
+table dPeriodo
+	lineageTag: c9aa3311-1fc3-406a-9523-17c53488f506
+
+	column Modo
+		dataType: string
+		lineageTag: 0a72e650-98fd-4e6c-b2af-c00719370dd9
+		summarizeBy: none
+		sourceColumn: [Modo]
+
+	partition dPeriodo = calculated
+		mode: import
+		source =
+				DATATABLE("Modo", STRING, {
+					{"Seleção"},
+					{"Acumulado no ano"},
+					{"Ano completo"}
+				})
+
